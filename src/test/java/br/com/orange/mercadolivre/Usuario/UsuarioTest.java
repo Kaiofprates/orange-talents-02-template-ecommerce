@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -44,6 +45,7 @@ public class UsuarioTest {
             "}";
 
     @Test
+    @WithMockUser
     @DisplayName("Deveria lidar com o sucesso no cadastro de usuário")
 
     public void criaUsuarioTeste() throws  Exception{
@@ -52,7 +54,7 @@ public class UsuarioTest {
         * Nesse desafio seguiremos a risca todas as especificações
         * retornaremos apenas o status code 200 e não mais um objeto!
         */
-         mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuario")
+         mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(this.usuarioRequest)
@@ -60,13 +62,14 @@ public class UsuarioTest {
                     .andDo(MockMvcResultHandlers.print());
     }
     @Test
+    @WithMockUser
     @DisplayName("Deveria lidar com o email duplicado no banco de dados")
     @Transactional
     public void emailDuplicadoTeste() throws  Exception{
 
         populaBanco();
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuario")
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.usuarioRequest)
@@ -77,8 +80,8 @@ public class UsuarioTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
-    @DisplayName("Deveria lidar com login (email) branco ou nulo")
     @Test
+    @WithMockUser
     public void emailVazioTeste() throws  Exception{
 
         String usuarioNullouVazio = "{\n" +
@@ -97,8 +100,9 @@ public class UsuarioTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
-    @DisplayName("Deveria lidar com login (email) com formato inválido")
     @Test
+    @WithMockUser
+    @DisplayName("Deveria lidar com login (email) com formato inválido")
     public void emailFormatoInvalidoTeste() throws  Exception{
 
         String emailMalFormatado = "{\n" +
@@ -117,8 +121,9 @@ public class UsuarioTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
-    @DisplayName("Deveria lidar com a senha branca ou nula")
     @Test
+    @WithMockUser
+    @DisplayName("Deveria lidar com a senha branca ou nula")
     public void senhaBrancaOuNulaTeste() throws  Exception{
 
         String senhaBrancaOuNula = "{\n" +
@@ -137,8 +142,9 @@ public class UsuarioTest {
                 .andDo(MockMvcResultHandlers.print());
     }
 
-    @DisplayName("Deveria lidar com uma senha com o tamanho menor que 6 caracteres")
     @Test
+    @DisplayName("Deveria lidar com uma senha com o tamanho menor que 6 caracteres")
+    @WithMockUser
     public void senhaSemTamanhoMinimo() throws  Exception{
 
         String senhaMenor = "{\n" +

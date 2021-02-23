@@ -15,7 +15,7 @@ public class CategoriaController {
     @PersistenceContext
     private EntityManager manager;
 
-    @PostMapping("/produtos")
+    @PostMapping("/categorias")
     @Transactional
     public ResponseEntity<?> novaCategoria(@Valid @RequestBody CategoriaRequest request){
         Categoria categoria = request.paraCategoria(manager);
