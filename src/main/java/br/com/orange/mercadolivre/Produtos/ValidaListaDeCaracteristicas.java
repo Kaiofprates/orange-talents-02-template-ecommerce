@@ -24,7 +24,7 @@ public class ValidaListaDeCaracteristicas implements Validator {
 
         ProdutosRequest request = (ProdutosRequest) target;
         List<Caracteristicas> caracteristicasList = request.getCaracteristicas();
-        if(caracteristicasList == null || caracteristicasList.size() < 3 ){
+        if(caracteristicasList == null || caracteristicasList.size() < 2 ){
             errors.rejectValue("caracteristicas","400", "Dados inválidos para a lista de caracteristicas");
         }
 

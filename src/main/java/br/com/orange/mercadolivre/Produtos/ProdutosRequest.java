@@ -29,7 +29,7 @@ public class ProdutosRequest {
                 ", valor=" + valor +
                 ", descricao='" + descricao + '\'' +
                 ", categoria=" + categoria +
-                ", caracteristicas=" + caracteristicas.size() +
+                ", caracteristicas=" + caracteristicas +
                 '}';
     }
 
