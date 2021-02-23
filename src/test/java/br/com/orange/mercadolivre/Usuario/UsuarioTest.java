@@ -86,7 +86,7 @@ public class UsuarioTest {
                 "    \"senha\" : \"123456\"\n" +
                 "}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuario")
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(usuarioNullouVazio)
@@ -106,7 +106,7 @@ public class UsuarioTest {
                 "    \"senha\" : \"123456\"\n" +
                 "}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuario")
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(emailMalFormatado)
@@ -126,14 +126,14 @@ public class UsuarioTest {
                 "    \"senha\" : \"\"\n" +
                 "}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuario")
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(senhaBrancaOuNula)
         ).andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(jsonPath("$[0].field").isString())
                 .andExpect(jsonPath("$[0].status").isNumber())
-                .andExpect(jsonPath("$[0].error").value("O campo senha não deve estar em branco"))
+                .andExpect(jsonPath("$[0].error").value("O campo senha deve ter no mínimo 6 caracteres"))
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -146,7 +146,7 @@ public class UsuarioTest {
                 "    \"senha\" : \"12345\"\n" +
                 "}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuario")
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(senhaMenor)

@@ -49,4 +49,11 @@ public class Usuario {
         this.senha = new BCryptPasswordEncoder().encode(senha);
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
 }
