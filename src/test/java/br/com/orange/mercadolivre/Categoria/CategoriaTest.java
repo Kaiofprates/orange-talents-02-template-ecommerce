@@ -33,13 +33,14 @@ public class CategoriaTest {
     private EntityManager manager;
 
     @Test
+    @WithMockUser
     public  void  categoriaCriadaComSucesso() throws Exception {
 
         String categoriaSucesso = "{\n" +
                 "    \"nome\" : \"Tecnologia\"\n" +
                 "}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/categoria")
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/categorias")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(categoriaSucesso)
@@ -48,6 +49,7 @@ public class CategoriaTest {
     }
 
     @Test
+    @WithMockUser
     @Transactional
     public  void  categoriaComIdDeCategoriaMaeInvalido() throws Exception {
         populaBanco();
@@ -56,7 +58,7 @@ public class CategoriaTest {
                 "    \"categoria\" : 4\n" +
                 "}";
         try{
-             mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/categoria")
+             mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/categorias")
             .accept(MediaType.APPLICATION_JSON)
             .contentType(MediaType.APPLICATION_JSON)
             .content(categoriaComIdValido));
@@ -75,7 +77,7 @@ public class CategoriaTest {
                 "    \"nome\" : \"Tecnologia\",\n" +
                 "}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/categoria")
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/categorias")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(categoriaNomeDuplicado)
@@ -83,6 +85,7 @@ public class CategoriaTest {
                 .andDo(MockMvcResultHandlers.print());
     }
     @Test
+    @WithMockUser
     public  void  categoriaComNomeEmBranco() throws Exception {
 
         String categoriaNomeEmBranco = "{\n" +
@@ -90,7 +93,7 @@ public class CategoriaTest {
                 "    \"categoria\" : 1\n" +
                 "}";
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/categoria")
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/categorias")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(categoriaNomeEmBranco)

@@ -51,7 +51,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
         http
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/mercadolivre/produtos/{id:[0-9]+}").permitAll()
-                .antMatchers(HttpMethod.POST, "/mercadolivre/usuarios").permitAll()
+                .antMatchers("/mercadolivre/produtos").permitAll()
+                .antMatchers(HttpMethod.POST, "/mercadolivre/categorias").permitAll()
                 .antMatchers("/mercadolivre/api/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
