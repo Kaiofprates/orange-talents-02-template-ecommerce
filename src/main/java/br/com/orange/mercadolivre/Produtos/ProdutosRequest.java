@@ -1,5 +1,11 @@
 package br.com.orange.mercadolivre.Produtos;
 
+import br.com.orange.mercadolivre.Categoria.Categoria;
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -7,19 +13,31 @@ import java.util.List;
 
 public class ProdutosRequest {
 
+    @NotBlank
     private String nome;
-    private BigDecimal valor;
-    private String descricao;
-    private Long categoria;
-    private LocalDateTime registro = LocalDateTime.now(ZoneId.systemDefault());
-    private List<Caracteristicas> caracteristicas ;
 
-    public ProdutosRequest(String nome, BigDecimal valor, String descricao, Long categoria, List<Caracteristicas> caracteristicas) {
-        this.nome = nome;
-        this.valor = valor;
-        this.descricao = descricao;
-        this.categoria = categoria;
-        this.caracteristicas = caracteristicas;
+    @NotNull
+    @Positive
+    private BigDecimal valor;
+
+    @NotNull
+    @PositiveOrZero
+    private Long quantidade;
+
+    @NotBlank
+    @Length(max = 1000)
+    private String descricao;
+
+    @NotNull
+    private Long categoria;
+
+    private LocalDateTime registro = LocalDateTime.now(ZoneId.systemDefault());
+
+    @Size(min = 3)
+    private List<CaracteristicasRequest> caracteristicas;
+
+    public Long getCategoria() {
+        return categoria;
     }
 
     @Override
@@ -27,17 +45,28 @@ public class ProdutosRequest {
         return "ProdutosRequest{" +
                 "nome='" + nome + '\'' +
                 ", valor=" + valor +
+                ", quantidade=" + quantidade +
                 ", descricao='" + descricao + '\'' +
                 ", categoria=" + categoria +
-                ", caracteristicas=" + caracteristicas +
+                ", registro=" + registro +
+                ", caracteristicas=" + caracteristicas.toString() +
                 '}';
     }
 
-    public Long getCategoria() {
-        return categoria;
+    @Transactional
+    public Produto paraProduto(EntityManager manager) {
+        Categoria c = manager.find(Categoria.class,categoria);
+        Produto produto = new Produto(nome,valor,quantidade,descricao,c,registro);
+
+        for(CaracteristicasRequest caracteristicasRequest: caracteristicas){
+            Caracteristicas caracteristicas = caracteristicasRequest.toModel(produto);
+            manager.persist(caracteristicas);
+        }
+
+        return produto;
     }
 
-    public List<Caracteristicas> getCaracteristicas() {
+    public List<CaracteristicasRequest> getCaracteristicas() {
         return caracteristicas;
     }
 }

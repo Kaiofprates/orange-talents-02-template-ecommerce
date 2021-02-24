@@ -1,6 +1,5 @@
 package br.com.orange.mercadolivre.Produtos;
 
-import jdk.dynalink.linker.LinkerServices;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -23,7 +22,14 @@ public class ValidaListaDeCaracteristicas implements Validator {
         }
 
         ProdutosRequest request = (ProdutosRequest) target;
-        List<Caracteristicas> caracteristicasList = request.getCaracteristicas();
+        List<CaracteristicasRequest> caracteristicasList = request.getCaracteristicas();
+
+        for(CaracteristicasRequest c : caracteristicasList){
+            if(c.getNome() == null || c.getDescricao() == null){
+                errors.rejectValue("caracteristicas","400", "Dados inválidos para a lista de caracteristicas");
+            }
+        }
+
         if(caracteristicasList == null || caracteristicasList.size() < 2 ){
             errors.rejectValue("caracteristicas","400", "Dados inválidos para a lista de caracteristicas");
         }
