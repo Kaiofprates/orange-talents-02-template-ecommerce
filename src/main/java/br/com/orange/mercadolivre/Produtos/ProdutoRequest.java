@@ -5,12 +5,14 @@ import br.com.orange.mercadolivre.Usuario.Usuario;
 import br.com.orange.mercadolivre.handlers.exceptions.validation.ValidID.ExistId;
 import org.hibernate.validator.constraints.Length;
 
-import javax.naming.ldap.HasControls;
 import javax.persistence.EntityManager;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ProdutoRequest {
 
