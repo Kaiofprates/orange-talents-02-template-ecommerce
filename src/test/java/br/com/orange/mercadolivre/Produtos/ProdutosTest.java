@@ -5,10 +5,8 @@ import br.com.orange.mercadolivre.Usuario.Usuario;
 import br.com.orange.mercadolivre.Usuario.UsuarioRepository;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureDataJpa;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -88,4 +86,41 @@ public class ProdutosTest {
                 .andDo(MockMvcResultHandlers.print());
 
     }
+
+    @Test
+    @Transactional
+    @WithMockUser(username = "manuel@email.com",password = "123456")
+    public void idCategoriaInvalidoTeste() throws Exception {
+
+        cadastraProduto();
+        Authentication a = SecurityContextHolder.getContext().getAuthentication();
+        Usuario usuario = repository.findByEmail(a.getName());
+        Assertions.assertEquals(usuario.getEmail(),a.getName());
+
+        String request = "{\n" +
+                "    \"nome\" : \"Tenis\",\n" +
+                "    \"valor\" : 1089.0,\n" +
+                "    \"descricao\" : \"Adidas usado \",\n" +
+                "    \"quantidade\" : 1,\n" +
+                "    \"idCategoria\" : 3,\n" +
+                "    \"caracteristicas\" : [\n" +
+                "        {\"nome\" : \"Marca\",\"descricao\" : \"Adidas\"} ,\n" +
+                "        { \"nome\" : \"Cor \" , \"descricao\" : \"Branco\"},\n" +
+                "        {\"nome\" : \"Desconto\", \"descricao\": \"10% a prazo\"}    \n" +
+                "    ]\n" +
+                "}";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/produtos")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(request)
+        ).andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(jsonPath("$[0].field").isString())
+                .andExpect(jsonPath("$[0].status").isNumber())
+                .andExpect(jsonPath("$[0].error").value("Id not found"))
+                .andDo(MockMvcResultHandlers.print());
+
+    }
+
+
 }
