@@ -8,6 +8,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.Normalizer;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,15 @@ public class ValidationErrorHandler {
         });
         return dto;
     }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public FormErrorDTO handlerAsserts(IllegalArgumentException exception){
+        LocalDateTime time = LocalDateTime.now();
+        FormErrorDTO dto = new FormErrorDTO(null,exception.getMessage(),400,time);
+        return dto;
+    }
+
 
 
 

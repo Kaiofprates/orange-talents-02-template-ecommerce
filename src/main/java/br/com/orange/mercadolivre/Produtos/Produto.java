@@ -2,13 +2,13 @@ package br.com.orange.mercadolivre.Produtos;
 
 import br.com.orange.mercadolivre.Categoria.Categoria;
 import br.com.orange.mercadolivre.Usuario.Usuario;
+import br.com.orange.mercadolivre.Usuario.UsuarioRepository;
+import io.jsonwebtoken.lang.Assert;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 public class Produto {
@@ -16,49 +16,61 @@ public class Produto {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
-    private BigDecimal valor;
-    private Long quantidade;
+    private int quantidade;
     private String descricao;
-
+    private BigDecimal valor;
     @ManyToOne
     private Categoria categoria;
+    @ManyToOne
+    private Usuario usuario;
+    @OneToMany(mappedBy = "produto",cascade = CascadeType.PERSIST)
+    private Set<Caracteristica> caracteristicas = new HashSet<>();
 
-   // @ManyToOne
-   // private Usuario usuario;
-
-    private LocalDateTime registro;
-
-    @OneToMany(mappedBy = "produto", cascade = CascadeType.PERSIST)
-    private List<Caracteristicas> caracteristicas ;
-
-    @Deprecated
-    public Produto(){
-    }
-
-    public Produto(String nome, BigDecimal valor, Long quantidade, String descricao, Categoria categoria, LocalDateTime registro) {
+    public Produto(String nome, int quantidade, String descricao,
+                   BigDecimal valor, Categoria categoria,
+                   Usuario usuario, Collection<CaracteristicaRequest> caracteristicas) {
         this.nome = nome;
-        this.valor = valor;
         this.quantidade = quantidade;
         this.descricao = descricao;
+        this.valor = valor;
         this.categoria = categoria;
-        this.registro = registro;
+        this.usuario = usuario;
+        Set<Caracteristica> novasCaracteristicas =  caracteristicas.stream().map(caracteristica -> caracteristica.toModel(this)).collect(Collectors.toSet());
+        this.caracteristicas.addAll(novasCaracteristicas);
+
+        Assert.isTrue(this.caracteristicas.size() >= 3, "Cadastre no minimo 3 caracteristicas");
+
     }
 
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", valor=" + valor +
-                ", quantidade=" + quantidade +
-                ", descricao='" + descricao + '\'' +
-                ", categoria=" + categoria +
-                ", registro=" + registro +
-                ", caracteristicas=" + caracteristicas.toString() +
-                '}';
+    public Long getId() {
+        return id;
     }
 
-    public void setCaracteristicas(List<Caracteristicas> caracteristicas) {
-        this.caracteristicas = caracteristicas;
+    public String getNome() {
+        return nome;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public Set<Caracteristica> getCaracteristicas() {
+        return caracteristicas;
     }
 }
