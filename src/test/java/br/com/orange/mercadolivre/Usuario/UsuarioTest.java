@@ -1,6 +1,7 @@
 package br.com.orange.mercadolivre.Usuario;
 
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.runner.RunWith;
@@ -8,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -31,6 +34,11 @@ public class UsuarioTest {
 
     @PersistenceContext
     private EntityManager manager;
+
+
+    @Autowired
+    private UsuarioRepository repository;
+
 
     @Transactional
     private void populaBanco(){
@@ -162,8 +170,6 @@ public class UsuarioTest {
                 .andExpect(jsonPath("$[0].error").value("O campo senha deve ter no mínimo 6 caracteres"))
                 .andDo(MockMvcResultHandlers.print());
     }
-
-
 
 }
 
