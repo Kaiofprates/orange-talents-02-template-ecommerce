@@ -1,14 +1,12 @@
 package br.com.orange.mercadolivre.Usuario;
 
-import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -20,7 +18,6 @@ import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
 
@@ -45,7 +42,7 @@ public class UsuarioTest {
 
 
     String usuarioRequest = "{\n" +
-            "    \"email\" : \"johndoe@email.com\",\n" +
+            "    \"email\" : \"email@email.br\",\n" +
             "    \"senha\" : \"123456\"\n" +
             "}";
 
@@ -71,8 +68,6 @@ public class UsuarioTest {
     @DisplayName("Deveria lidar com o email duplicado no banco de dados")
     @Transactional
     public void emailDuplicadoTeste() throws  Exception{
-
-        populaBanco();
 
         mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
                 .accept(MediaType.APPLICATION_JSON)

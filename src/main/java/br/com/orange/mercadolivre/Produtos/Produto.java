@@ -1,6 +1,7 @@
 package br.com.orange.mercadolivre.Produtos;
 
 import br.com.orange.mercadolivre.Categoria.Categoria;
+import br.com.orange.mercadolivre.Opiniao.Opiniao;
 import br.com.orange.mercadolivre.Usuario.Usuario;
 import br.com.orange.mercadolivre.Usuario.UsuarioRepository;
 import io.jsonwebtoken.lang.Assert;
@@ -28,6 +29,9 @@ public class Produto {
 
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens = new HashSet<>();
+
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<Opiniao> opinioes = new HashSet<>();
 
     @Deprecated
     public Produto(){

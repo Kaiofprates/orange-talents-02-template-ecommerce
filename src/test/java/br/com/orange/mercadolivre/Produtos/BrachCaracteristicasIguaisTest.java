@@ -1,6 +1,7 @@
 package br.com.orange.mercadolivre.Produtos;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -17,6 +18,7 @@ public class BrachCaracteristicasIguaisTest {
 
 
     @Test
+    @DisplayName("Teste unitário para metodo de validação de categorias")
     @ParameterizedTest
     @MethodSource("requestLista")
     public void testaMetodoDeValidacaoDeCategorias(int check,List<CaracteristicaRequest> caracteristicaRequests){
