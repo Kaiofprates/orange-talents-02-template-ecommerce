@@ -19,7 +19,6 @@ import java.util.stream.Stream;
 @SpringBootTest
 public class CategoriaRequestTest {
 
-    @Test
     @DisplayName("Testa a inserção de menos que duas caracteristicas")
     @ParameterizedTest
     @MethodSource("caracteristica2")
@@ -36,7 +35,7 @@ public class CategoriaRequestTest {
         }
 
     }
-    @Test
+
     @ParameterizedTest
     @DisplayName("Testa a inserção de tres caracteristicas")
     @MethodSource("caracteristica3")
@@ -49,7 +48,6 @@ public class CategoriaRequestTest {
 
     }
 
-    @Test
     @DisplayName("Testa a inserção de mais de tres caracteristicas")
     @ParameterizedTest
     @MethodSource("caracteristica4")
@@ -62,9 +60,8 @@ public class CategoriaRequestTest {
 
     }
 
-    @Test
-    @DisplayName("Testa a inserção de carcteristicas duplicadas")
     @ParameterizedTest
+    @DisplayName("Testa a inserção de carcteristicas duplicadas")
     @MethodSource("caracteristicaDuplicada")
     public void caracteristicaDuplicadaTest(Collection<CaracteristicaRequest> caracteristicaRequests){
 
