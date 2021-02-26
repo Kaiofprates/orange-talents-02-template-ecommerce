@@ -1,8 +1,7 @@
 package br.com.orange.mercadolivre.ImagemTeste;
 
+import br.com.orange.mercadolivre.Usuario.Usuario;
 import br.com.orange.mercadolivre.UtilTest;
-import br.com.orange.mercadolivre.security.AuthUtils;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,41 +12,43 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @AutoConfigureMockMvc
-public class ImagemTest {
 
-    /**
-     *  REFATORAR
-     */
-
+public class UsuarioNaoAutorizadoTeste {
 
     @Autowired
     private MockMvc mockMvc;
-
     @Autowired
-    private AuthUtils authUtils;
+    private UtilTest utilTest;
 
     @PersistenceContext
     private EntityManager manager;
 
-    @Autowired
-    private UtilTest utilTest;
 
+    //  Tenho minhas dúvidas se esse teste funciona de fato!
     @Test
     @Transactional
     @WithMockUser(username = "manu@email.com", password = "123456")
-    public void usuarioNaoAutorizadoTest() throws Exception {
+    public void usuarioCadastradoMasNaoDonoDoProdutoTeste() throws Exception {
+        utilTest.limpaBanco();
         utilTest.populaBanco();
+
+        // Salva o usuário manu no banco
+
+        Usuario usuario = new Usuario("manu@email.com", "123456");
+        manager.persist(usuario);
+
         MockMultipartFile file
                 = new MockMultipartFile(
                 "imagens",
@@ -55,11 +56,8 @@ public class ImagemTest {
                 MediaType.TEXT_PLAIN_VALUE,
                 "Hello, World!".getBytes()
         );
-        try {
-            mockMvc.perform(multipart("/mercadolivre/produtos/1/imagens").file(file));
-        } catch (ResponseStatusException e) {
-            Assert.fail();
-        }
-    }
 
+        mockMvc.perform(multipart("/mercadolivre/produtos/1/imagens").file(file))
+                .andExpect(status().isForbidden());
+    }
 }
