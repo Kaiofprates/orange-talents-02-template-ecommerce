@@ -42,7 +42,7 @@ public class UsuarioTest {
 
 
     String usuarioRequest = "{\n" +
-            "    \"email\" : \"email@email.br\",\n" +
+            "    \"email\" : \"johndoe@email.br\",\n" +
             "    \"senha\" : \"123456\"\n" +
             "}";
 
@@ -68,11 +68,14 @@ public class UsuarioTest {
     @DisplayName("Deveria lidar com o email duplicado no banco de dados")
     @Transactional
     public void emailDuplicadoTeste() throws  Exception{
-
+        String request = "{\n" +
+                "    \"email\" : \"email@email.br\",\n" +
+                "    \"senha\" : \"123456\"\n" +
+                "}";
         mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(this.usuarioRequest)
+                .content(request)
         ).andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(jsonPath("$[0].field").isString())
                 .andExpect(jsonPath("$[0].status").isNumber())
