@@ -2,11 +2,14 @@ package br.com.orange.mercadolivre.Compra;
 
 import br.com.orange.mercadolivre.Produtos.Produto;
 import br.com.orange.mercadolivre.Usuario.Usuario;
+import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.UUID;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 
 @Entity
 public class Compra {
@@ -33,12 +36,30 @@ public class Compra {
     @Enumerated(EnumType.STRING)
     private Status statusCompra = Status.INICIADA;
 
+    @OneToMany(mappedBy = "compra", cascade = CascadeType.MERGE)
+    private Set<Transacao> transacoes = new HashSet<>();
+
+
+    public void registraTransacao(Boolean status, String idTransacao) {
+
+        /**
+         *  Não há necessidade de percorrer transações para validar apenas uma como finalizada
+         *  se o estado for finalizado não haverá mais transações :)
+         */
+        Assert.isTrue(this.statusCompra != Status.FINALIZADA, "Não há mais transações disponíveis para esse produto");
+
+        transacoes.add(new Transacao(status, idTransacao, this));
+
+        if(status){
+            this.statusCompra = Status.FINALIZADA;
+        }
+    }
+
 
     public enum Status{
         INICIADA,
         FINALIZADA
     }
-
 
 
     @Deprecated
@@ -58,6 +79,9 @@ public class Compra {
                 ", comprador=" + comprador +
                 ", produto=" + produto +
                 ", quantidade=" + quantidade +
+                ", gateway=" + gateway +
+                ", statusCompra=" + statusCompra +
+                ", transacoes=" + transacoes +
                 '}';
     }
 
