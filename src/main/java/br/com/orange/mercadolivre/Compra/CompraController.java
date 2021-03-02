@@ -21,25 +21,32 @@ public class CompraController {
     @PersistenceContext
     private EntityManager manager;
 
+    // 1
     @Autowired
     private AuthUtils authUtils;
 
+    // 2
     @Autowired
     private SendMail sendMail;
 
-    @PostMapping("/produtos/{id}/compra")
+    @PostMapping("/produtos/api/compra")
     @Transactional
-    public void compra(@RequestBody @Valid  CompraRequest request, @PathVariable("id") Long id, HttpServletResponse httpServletResponse) {
+    public void compra(@RequestBody @Valid  CompraRequest request, HttpServletResponse httpServletResponse) {
 
-        Produto produto = manager.find(Produto.class, id);
+        // 3
+        Produto produto = manager.find(Produto.class, request.getProdutoId());
+        // 4
         Usuario comprador = authUtils.checkUser();
+        // 5
         Compra compra = request.toModel(produto,comprador,sendMail);
 
         manager.persist(compra);
 
         // redirecionamento
 
+        // 6
         Gateways pagamento  = new Gateways(request.getPagamento());
+
         httpServletResponse.setHeader("Location", pagamento.avaliaCompra(compra));
         httpServletResponse.setStatus(302);
 

@@ -18,6 +18,11 @@ public class CompraRequest {
     @NotNull
     private Gateways.Pagamentos pagamento;
 
+    @Positive
+    @NotNull
+    private Long produtoId;
+
+
     @Deprecated
     public CompraRequest(){}
 
@@ -30,6 +35,10 @@ public class CompraRequest {
         return quantidade;
     }
 
+    public Long getProdutoId() {
+        return produtoId;
+    }
+
     public Gateways.Pagamentos getPagamento() {
         return pagamento;
     }
@@ -38,11 +47,7 @@ public class CompraRequest {
         Assert.notNull(produto, "Produto não encontrado");
         Assert.notNull(comprador, "Usuário não encontrado");
         Assert.isTrue(produto.getQuantidade() >= quantidade, "Não há quantidade suficiente no estoque para a sua requisição");
-
-        /*
-        * Não há sentindo dentre as regras de negócio que eu abata o produto do estoque sem que a compra seja finalizada
-        * deixarei essa lógica para o próximo passo do desafio.
-        */
+        Assert.isTrue(produto.abateEstoque(quantidade), "Não foi possível abater a quantidade do estoque");
 
         // Deixo comentado para não ficar enviando emails por ae...
        //  sendMail.send("Há uma novo interesse de compra para o produto: "+ produto.getNome()+ " \n cliente: "+comprador.getEmail(),produto.getUsuario().getEmail());
