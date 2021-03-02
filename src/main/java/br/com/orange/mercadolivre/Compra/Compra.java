@@ -27,10 +27,6 @@ public class Compra {
     private int quantidade;
 
     @NotNull
-    private UUID identificador = UUID.randomUUID();
-
-
-    @NotNull
     @Enumerated(EnumType.STRING)
     private Gateways.Pagamentos gateway;
 
@@ -62,11 +58,10 @@ public class Compra {
                 ", comprador=" + comprador +
                 ", produto=" + produto +
                 ", quantidade=" + quantidade +
-                ", identificador=" + identificador +
                 '}';
     }
 
-    public String getIdentificador() {
-        return identificador.toString();
+    public String getId() {
+        return id.toString();
     }
 }

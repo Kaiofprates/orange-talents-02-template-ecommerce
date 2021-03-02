@@ -1,8 +1,6 @@
 package br.com.orange.mercadolivre.Compra;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
-import org.springframework.web.util.UriBuilder;
 
 public class Gateways {
 
@@ -22,8 +20,8 @@ public class Gateways {
         Assert.notNull(compra,"Compra não identificada");
 
         switch (getPagamento()){
-            case PAYPAL: return "http://localhost:8080/mercadolivre/paypal.com/"+compra.getIdentificador()+"?redirectUrl=urlRetornoAppPosPagamento";
-            case PAGSEGURO: return "http://localhost:8080/mercadolivre/pagseguro.com/"+compra.getIdentificador()+"?redirectUrl=urlRetornoAppPosPagamento";
+            case PAYPAL: return "http://localhost:8080/mercadolivre/paypal.com/"+compra.getId()+"?redirectUrl=urlRetornoAppPosPagamento";
+            case PAGSEGURO: return "http://localhost:8080/mercadolivre/pagseguro.com/"+compra.getId()+"?redirectUrl=urlRetornoAppPosPagamento";
         }
         return null;
     }

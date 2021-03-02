@@ -7,6 +7,8 @@ import br.com.orange.mercadolivre.Usuario.Usuario;
 import io.jsonwebtoken.lang.Assert;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
@@ -113,4 +115,15 @@ public class Produto {
                 .collect(Collectors.toCollection(TreeSet :: new));
     }
 
+    public boolean abateEstoque(@Positive int quantidade) {
+        if(quantidade <= 0 ){
+            return false;
+        }
+        if(this.quantidade >= quantidade){
+            this.quantidade-=quantidade;
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
