@@ -1,10 +1,10 @@
 package br.com.orange.mercadolivre.Detalhe;
 
-import br.com.orange.mercadolivre.Produtos.Caracteristica;
 import br.com.orange.mercadolivre.Produtos.Produto;
-import org.springframework.boot.SpringApplication;
 
 import java.math.BigDecimal;
+import java.util.Map;
+import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -18,7 +18,8 @@ public class DetalheResponse {
     private Set<DetalheCaracterisca> caracteristicas;
     private Set<String> imagens;
     private SortedSet<String> perguntas;
-
+    private Set<Map<String,String>> opinioes;
+    private Double mediaNotas;
 
     public DetalheResponse(Produto produto) {
         this.nome = produto.getNome();
@@ -27,6 +28,13 @@ public class DetalheResponse {
         this.caracteristicas  = produto.buscaCarcteristicas(DetalheCaracterisca::new);
         this.imagens = produto.buscaImagens(img -> img.getLink());
         this.perguntas = produto.buscaPerguntas(pergunta -> pergunta.getTitulo());
+
+        // refatora lógica de opinião
+
+        DetalheOpiniao detalheOpiniao = new DetalheOpiniao(produto.getOpinioes());
+        this.opinioes = detalheOpiniao.getOpinioes();
+        this.mediaNotas = detalheOpiniao.media();
+
     }
 
 
@@ -52,5 +60,13 @@ public class DetalheResponse {
 
     public SortedSet<String> getPerguntas() {
         return perguntas;
+    }
+
+    public Set<Map<String, String>> getOpinioes() {
+        return opinioes;
+    }
+
+    public Double getMediaNotas() {
+        return mediaNotas;
     }
 }

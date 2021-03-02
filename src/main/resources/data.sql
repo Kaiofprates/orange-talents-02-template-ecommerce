@@ -17,3 +17,6 @@ insert into pergunta (criacao, titulo, perguntador_id, produto_id) values ('2021
 insert into pergunta (criacao, titulo, perguntador_id, produto_id) values ('2021-03-01T19:40:07.063604' , 'é semi novo?' , 3, 1);
 insert into pergunta (criacao, titulo, perguntador_id, produto_id) values ('2021-03-01T19:40:07.063604' , 'entrega por sedex até sexta?' , 4, 1);
 insert into pergunta (criacao, titulo, perguntador_id, produto_id) values ('2021-03-01T19:40:07.063604' , 'tem em um tamanho menor?' , 5, 1);
+insert into opiniao(descricao, nota, titulo, produto_id, usuario_id) values ( 'bem conservado',3,'tenis adidas', 1,1);
+insert into opiniao(descricao, nota, titulo, produto_id, usuario_id) values ( 'veio direito',3,'tenis adidas', 1,1);
+insert into opiniao(descricao, nota, titulo, produto_id, usuario_id) values ( 'bom vendedor',3,'tenis adidas', 1,1);
