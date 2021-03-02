@@ -1,5 +1,6 @@
 package br.com.orange.mercadolivre.handlers.exceptions.validation.UniqueValues;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import javax.persistence.EntityManager;
@@ -12,7 +13,8 @@ import java.util.List;
 public class UniqueValueValidator implements ConstraintValidator<UniqueValue,Object> {
     private  String domainAttribute;
     private Class<?> klass;
-    @PersistenceContext
+
+    @Autowired
     private EntityManager manager;
 
     @Override
