@@ -52,4 +52,6 @@ public class Opiniao {
     public int hashCode() {
         return Objects.hash(descricao, produto, usuario);
     }
+
+
 }
