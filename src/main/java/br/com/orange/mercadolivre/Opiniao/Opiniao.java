@@ -53,5 +53,15 @@ public class Opiniao {
         return Objects.hash(descricao, produto, usuario);
     }
 
+    public String getDescricao() {
+        return descricao;
+    }
 
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public int getNota() {
+        return nota;
+    }
 }
