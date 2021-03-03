@@ -32,11 +32,6 @@ public class Usuario {
     public Usuario() {
     }
 
-    /**
-    * @param email string no formato de email
-    * @param senha string em texto limpo
-    */
-
     public Usuario(@NotBlank @Email String email, @NotBlank @Size(min = 6) String senha) {
 
         // princípios de programação defenciva
@@ -57,13 +52,9 @@ public class Usuario {
         return senha;
     }
 
-    @Override
-    public String toString() {
-        return "Usuario{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", senha='" + senha + '\'' +
-                ", registro=" + registro +
-                '}';
+    public Long getId() {
+        return id;
     }
+
+
 }

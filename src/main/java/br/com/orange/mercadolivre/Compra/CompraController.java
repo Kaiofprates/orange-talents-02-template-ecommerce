@@ -21,34 +21,36 @@ public class CompraController {
     @PersistenceContext
     private EntityManager manager;
 
-    // 1
     @Autowired
     private AuthUtils authUtils;
 
-    // 2
     @Autowired
     private SendMail sendMail;
 
     @PostMapping("/produtos/api/compra")
     @Transactional
-    public void compra(@RequestBody @Valid  CompraRequest request, HttpServletResponse httpServletResponse) {
+    public String compra(@RequestBody @Valid  CompraRequest request, HttpServletResponse httpServletResponse) {
 
-        // 3
         Produto produto = manager.find(Produto.class, request.getProdutoId());
-        // 4
         Usuario comprador = authUtils.checkUser();
-        // 5
         Compra compra = request.toModel(produto,comprador,sendMail);
 
         manager.persist(compra);
 
-        // redirecionamento
-
-        // 6
         Gateways pagamento  = new Gateways(request.getPagamento());
 
-        httpServletResponse.setHeader("Location", pagamento.avaliaCompra(compra));
-        httpServletResponse.setStatus(302);
+        /*
+        *   Seria correto fazer o redirect, mas achei melhor seguir os caminhos que o Alberto fez
+        *   de qualquer forma em outro momento já esta aqui o código que redirecionaria o usuário
+        *   à rota indicada nas especificações.
+        *   Até porque esse redirect como tem um id que em tese é aleatório, não retorna o caminho certo
+        *   porque tenta ir para a rota e dá outro retorno.
+        */
+
+        //httpServletResponse.setHeader("Location", pagamento.avaliaCompra(compra));
+        //httpServletResponse.setStatus(302);
+
+        return pagamento.avaliaCompra(compra);
 
     }
 
