@@ -2,7 +2,8 @@ package br.com.orange.mercadolivre.Produtos;
 
 import br.com.orange.mercadolivre.Categoria.Categoria;
 import br.com.orange.mercadolivre.Usuario.Usuario;
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,10 +15,11 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
+
 @SpringBootTest
 public class CategoriaRequestTest {
 
-    @Test
+    @DisplayName("Testa a inserção de menos que duas caracteristicas")
     @ParameterizedTest
     @MethodSource("caracteristica2")
     public void caracteristicaMenorQueDoisTest(Collection<CaracteristicaRequest> caracteristicaRequests){
@@ -33,8 +35,9 @@ public class CategoriaRequestTest {
         }
 
     }
-    @Test
+
     @ParameterizedTest
+    @DisplayName("Testa a inserção de tres caracteristicas")
     @MethodSource("caracteristica3")
     public void caracteristicaTresElementosTest(Collection<CaracteristicaRequest> caracteristicaRequests){
 
@@ -45,7 +48,7 @@ public class CategoriaRequestTest {
 
     }
 
-    @Test
+    @DisplayName("Testa a inserção de mais de tres caracteristicas")
     @ParameterizedTest
     @MethodSource("caracteristica4")
     public void caracteristicaQuatroElementosTest(Collection<CaracteristicaRequest> caracteristicaRequests){
@@ -57,8 +60,8 @@ public class CategoriaRequestTest {
 
     }
 
-    @Test
     @ParameterizedTest
+    @DisplayName("Testa a inserção de carcteristicas duplicadas")
     @MethodSource("caracteristicaDuplicada")
     public void caracteristicaDuplicadaTest(Collection<CaracteristicaRequest> caracteristicaRequests){
 

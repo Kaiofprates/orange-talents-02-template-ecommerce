@@ -50,9 +50,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+
                 .antMatchers(HttpMethod.GET, "/mercadolivre/produtos/{id:[0-9]+}").permitAll()
                 .antMatchers(HttpMethod.POST, "/mercadolivre/produtos/{id:[0-9]+}/imagens").permitAll()
                 .antMatchers("/mercadolivre/produtos").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/mercadolivre/categorias").permitAll()
                 .antMatchers(HttpMethod.POST, "/mercadolivre/usuarios").permitAll()
                 .antMatchers("/mercadolivre/api/auth/**").permitAll()
@@ -68,6 +70,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
                         UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(new JwtAuthenticationEntryPoint());
+
+                 http.headers().frameOptions().disable();
+
 
     }
 

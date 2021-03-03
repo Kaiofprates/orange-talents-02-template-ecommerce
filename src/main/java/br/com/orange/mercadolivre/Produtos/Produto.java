@@ -1,13 +1,17 @@
 package br.com.orange.mercadolivre.Produtos;
 
 import br.com.orange.mercadolivre.Categoria.Categoria;
+import br.com.orange.mercadolivre.Opiniao.Opiniao;
+import br.com.orange.mercadolivre.Pergunta.Pergunta;
 import br.com.orange.mercadolivre.Usuario.Usuario;
-import br.com.orange.mercadolivre.Usuario.UsuarioRepository;
 import io.jsonwebtoken.lang.Assert;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import javax.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Entity
@@ -29,6 +33,14 @@ public class Produto {
     @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
     private Set<ImagemProduto> imagens = new HashSet<>();
 
+    @OneToMany(mappedBy = "produto", cascade = CascadeType.MERGE)
+    private Set<Opiniao> opinioes = new HashSet<>();
+
+    @OneToMany(mappedBy = "produto")
+    @OrderBy("titulo asc")
+    private SortedSet<Pergunta> perguntas = new TreeSet<>();
+
+
     @Deprecated
     public Produto(){
     }
@@ -44,42 +56,24 @@ public class Produto {
         this.usuario = usuario;
         Set<Caracteristica> novasCaracteristicas =  caracteristicas.stream().map(caracteristica -> caracteristica.toModel(this)).collect(Collectors.toSet());
         this.caracteristicas.addAll(novasCaracteristicas);
-
         Assert.isTrue(this.caracteristicas.size() >= 3, "Cadastre no minimo 3 caracteristicas");
 
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getNome() {
-        return nome;
-    }
-
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public BigDecimal getValor() {
-        return valor;
-    }
-
-    public Categoria getCategoria() {
-        return categoria;
-    }
-
+    public Long getId() { return id; }
+    public String getNome() {return nome; }
+    public int getQuantidade() { return quantidade; }
+    public String getDescricao() { return descricao; }
+    public BigDecimal getValor() { return valor; }
+    public Categoria getCategoria() { return categoria; }
+    public Set<ImagemProduto> getImagens() { return imagens; }
     public Usuario getUsuario() {
         return usuario;
     }
-
     public Set<Caracteristica> getCaracteristicas() {
         return caracteristicas;
     }
+    public Set<Opiniao> getOpinioes() { return opinioes; }
 
 
     @Override
@@ -102,5 +96,34 @@ public class Produto {
               .map( link -> new ImagemProduto(this,link))
               .collect(Collectors.toSet());
     this.imagens.addAll(imagens);
+    }
+
+    /*
+    *  Mapeamentos para a página de detalhe do produto
+    */
+
+    public <T> Set <T> buscaCarcteristicas(Function<Caracteristica,T> funcaoMap){
+        return this.caracteristicas.stream().map(funcaoMap).collect(Collectors.toSet());
+    }
+
+    public <T> Set <T> buscaImagens(Function<ImagemProduto, T> funcaoMap){
+        return this.imagens.stream().map(funcaoMap).collect(Collectors.toSet());
+    }
+
+    public <T extends Comparable<T>> SortedSet<T> buscaPerguntas(Function<Pergunta, T> funcaoMapeadora) {
+        return this.perguntas.stream().map(funcaoMapeadora)
+                .collect(Collectors.toCollection(TreeSet :: new));
+    }
+
+    public boolean abateEstoque(@Positive int quantidade) {
+        if(quantidade <= 0 ){
+            return false;
+        }
+        if(this.quantidade >= quantidade){
+            this.quantidade-=quantidade;
+            return true;
+        }else{
+            return false;
+        }
     }
 }

@@ -1,29 +1,26 @@
 package br.com.orange.mercadolivre.Usuario;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.Assert;
+import org.springframework.web.util.NestedServletException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-@RunWith(SpringRunner.class)
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 
@@ -48,7 +45,7 @@ public class UsuarioTest {
 
 
     String usuarioRequest = "{\n" +
-            "    \"email\" : \"johndoe@email.com\",\n" +
+            "    \"email\" : \"johndoe@email.br\",\n" +
             "    \"senha\" : \"123456\"\n" +
             "}";
 
@@ -74,18 +71,25 @@ public class UsuarioTest {
     @DisplayName("Deveria lidar com o email duplicado no banco de dados")
     @Transactional
     public void emailDuplicadoTeste() throws  Exception{
+        String request = "{\n" +
+                "    \"email\" : \"em@email.br\",\n" +
+                "    \"senha\" : \"123456\"\n" +
+                "}";
 
-        populaBanco();
+            mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(request)
+            ).andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print());
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(this.usuarioRequest)
-        ).andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(jsonPath("$[0].field").isString())
-                .andExpect(jsonPath("$[0].status").isNumber())
-                .andExpect(jsonPath("$[0].error").value("duplicate values"))
-                .andDo(MockMvcResultHandlers.print());
+            mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(request)
+            ).andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andDo(MockMvcResultHandlers.print());
+
     }
 
     @Test
@@ -146,7 +150,6 @@ public class UsuarioTest {
         ).andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(jsonPath("$[0].field").isString())
                 .andExpect(jsonPath("$[0].status").isNumber())
-                .andExpect(jsonPath("$[0].error").value("O campo senha deve ter no mínimo 6 caracteres"))
                 .andDo(MockMvcResultHandlers.print());
     }
 
