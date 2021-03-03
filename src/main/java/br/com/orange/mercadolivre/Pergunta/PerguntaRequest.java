@@ -27,14 +27,6 @@ public class PerguntaRequest {
     @Deprecated
     public  PerguntaRequest(){}
 
-    @Override
-    public String toString() {
-        return "PerguntaRequest{" +
-                "titulo='" + titulo + '\'' +
-                ", criacao=" + criacao +
-                '}';
-    }
-
     public Pergunta toModel(Usuario perguntador, Produto produto) {
         Assert.notNull(perguntador, "O usuário inválido");
         Assert.notNull(produto, "Não foi possível recuperar o produto informado");

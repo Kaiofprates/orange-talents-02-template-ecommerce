@@ -37,17 +37,6 @@ public class Pergunta  implements Comparable<Pergunta>{
         this.produto = produto;
     }
 
-    @Override
-    public String toString() {
-        return "Pergunta{" +
-                "id=" + id +
-                ", titulo='" + titulo + '\'' +
-                ", criacao=" + criacao +
-                ", perguntador=" + perguntador +
-                ", produto=" + produto +
-                '}';
-    }
-
     public String getTitulo() {
         return titulo;
     }

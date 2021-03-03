@@ -39,12 +39,4 @@ public class Transacao {
         this.compra = compra;
     }
 
-    @Override
-    public String toString() {
-        return "Transacao{" +
-                "id=" + id +
-                ", status=" + status +
-                ", registro=" + registro +
-                '}';
-    }
 }

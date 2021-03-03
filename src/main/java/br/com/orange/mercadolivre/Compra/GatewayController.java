@@ -1,5 +1,9 @@
 package br.com.orange.mercadolivre.Compra;
 
+import br.com.orange.mercadolivre.Compra.Notas.NotaFiscal;
+import br.com.orange.mercadolivre.Compra.Ranking.Ranking;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +19,16 @@ public class GatewayController {
     @PersistenceContext
     private EntityManager manager;
 
+    @Autowired
+    private NotaFiscal nf;
+
+    @Autowired
+    private Ranking ranking;
+
 
     @PostMapping("/paypal.com/{id}")
     @Transactional
-    public String paypalPagamento(@PathVariable("id") Long id,@Valid  PaypalRequest request){
+    public ResponseEntity<?> paypalPagamento(@PathVariable("id") Long id, @Valid  PaypalRequest request){
 
         Compra compra = manager.find(Compra.class,id);
         Assert.isTrue(compra != null, "Registro de compra não encontrado!");
@@ -26,12 +36,20 @@ public class GatewayController {
 
         manager.merge(compra);
 
-        return compra.toString();
+        if(compra != null){
+
+            nf.processa(compra);
+            ranking.processa(compra);
+
+        }
+
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/pagseguro.com/{id}")
     @Transactional
-    public String pagseguroPagamento(@PathVariable("id") Long id,@Valid  PageseguroRequest request){
+    public ResponseEntity<?> pagseguroPagamento(@PathVariable("id") Long id,@Valid  PageseguroRequest request){
 
         Compra compra = manager.find(Compra.class,id);
         Assert.isTrue(compra != null, "Registro de compra não encontrado!");
@@ -39,7 +57,13 @@ public class GatewayController {
 
         manager.merge(compra);
 
-        return compra.toString();
+        if(compra != null){
+
+            nf.processa(compra);
+            ranking.processa(compra);
+
+        }
+        return ResponseEntity.ok().build();
     }
 
 

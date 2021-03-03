@@ -87,4 +87,12 @@ public class Compra {
     public String getId() {
         return id.toString();
     }
+
+    public Usuario getComprador() {
+        return comprador;
+    }
+
+    public Produto getProduto() {
+        return produto;
+    }
 }
