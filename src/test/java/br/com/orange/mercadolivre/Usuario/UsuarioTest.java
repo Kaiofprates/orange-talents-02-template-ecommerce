@@ -1,5 +1,6 @@
 package br.com.orange.mercadolivre.Usuario;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.util.Assert;
+import org.springframework.web.util.NestedServletException;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -69,18 +72,24 @@ public class UsuarioTest {
     @Transactional
     public void emailDuplicadoTeste() throws  Exception{
         String request = "{\n" +
-                "    \"email\" : \"email@email.br\",\n" +
+                "    \"email\" : \"em@email.br\",\n" +
                 "    \"senha\" : \"123456\"\n" +
                 "}";
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(request)
-        ).andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(jsonPath("$[0].field").isString())
-                .andExpect(jsonPath("$[0].status").isNumber())
-                .andExpect(jsonPath("$[0].error").value("duplicate values"))
-                .andDo(MockMvcResultHandlers.print());
+
+            mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(request)
+            ).andExpect(MockMvcResultMatchers.status().isOk())
+                    .andDo(MockMvcResultHandlers.print());
+
+            mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/usuarios")
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(request)
+            ).andExpect(MockMvcResultMatchers.status().isBadRequest())
+                    .andDo(MockMvcResultHandlers.print());
+
     }
 
     @Test

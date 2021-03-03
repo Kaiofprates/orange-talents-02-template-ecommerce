@@ -6,7 +6,7 @@ insert into usuario ( email, registro, senha) values ( 'lidia@gmail.com' ,'2021-
 
 insert into categoria (nome) values ( 'tecnologia');
 insert into produto ( descricao, nome, quantidade, valor, categoria_id, usuario_id)  values (' produto legal' , 'tenis', 8, 10.89, 1, 1);
-insert into produto ( descricao, nome, quantidade, valor, categoria_id, usuario_id)  values (' produto legal' , 'tenis', 3, 10.89, 1, 2);
+insert into produto ( descricao, nome, quantidade, valor, categoria_id, usuario_id)  values (' produto legal' , 'tenis', 6, 10.89, 1, 2);
 insert into caracteristica (descricao, nome, produto_id) values ( 'adidas' ,'marca', 1);
 insert into caracteristica (descricao, nome, produto_id) values ( 'medio' ,'Tamanho', 1);
 insert into caracteristica (descricao, nome, produto_id) values ( 'Branca' ,'Cor', 1);
@@ -20,3 +20,5 @@ insert into pergunta (criacao, titulo, perguntador_id, produto_id) values ('2021
 insert into opiniao(descricao, nota, titulo, produto_id, usuario_id) values ( 'bem conservado',3,'tenis adidas', 1,1);
 insert into opiniao(descricao, nota, titulo, produto_id, usuario_id) values ( 'veio direito',3,'tenis adidas', 1,1);
 insert into opiniao(descricao, nota, titulo, produto_id, usuario_id) values ( 'bom vendedor',3,'tenis adidas', 1,1);
+insert into compra (gateway, quantidade, status_compra, comprador_id, produto_id) values ( 'PAYPAL' , 2, 'INICIADA', 1, 1);
+insert into compra (gateway, quantidade, status_compra, comprador_id, produto_id) values ( 'PAYPAL' , 2, 'INICIADA', 1, 1);

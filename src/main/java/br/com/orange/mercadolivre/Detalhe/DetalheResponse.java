@@ -4,7 +4,6 @@ import br.com.orange.mercadolivre.Produtos.Produto;
 
 import java.math.BigDecimal;
 import java.util.Map;
-import java.util.OptionalDouble;
 import java.util.Set;
 import java.util.SortedSet;
 

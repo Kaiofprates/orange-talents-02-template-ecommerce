@@ -3,7 +3,6 @@ package br.com.orange.mercadolivre.Compra;
 import br.com.orange.mercadolivre.MailSender.SendMail;
 import br.com.orange.mercadolivre.Produtos.Produto;
 import br.com.orange.mercadolivre.Usuario.Usuario;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
 import javax.validation.constraints.NotNull;
@@ -46,11 +45,16 @@ public class CompraRequest {
     public Compra toModel(Produto produto, Usuario comprador, SendMail sendMail)  {
         Assert.notNull(produto, "Produto não encontrado");
         Assert.notNull(comprador, "Usuário não encontrado");
+
+        if( produto.getQuantidade() < quantidade || !produto.abateEstoque(quantidade) ){
+            //sendMail.send("Não foi possível realizar sua compra", comprador.getEmail());
+        }
+
         Assert.isTrue(produto.getQuantidade() >= quantidade, "Não há quantidade suficiente no estoque para a sua requisição");
         Assert.isTrue(produto.abateEstoque(quantidade), "Não foi possível abater a quantidade do estoque");
 
         // Deixo comentado para não ficar enviando emails por ae...
-       //  sendMail.send("Há uma novo interesse de compra para o produto: "+ produto.getNome()+ " \n cliente: "+comprador.getEmail(),produto.getUsuario().getEmail());
+        // sendMail.send("Há uma novo interesse de compra para o produto: "+ produto.getNome()+ " \n cliente: "+comprador.getEmail(),produto.getUsuario().getEmail());
 
         return new Compra(comprador,produto,quantidade,pagamento);
     }

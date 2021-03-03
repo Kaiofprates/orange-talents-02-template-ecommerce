@@ -23,35 +23,6 @@ public class ProdutosTest {
     private MockMvc mockMvc;
 
     @Test
-    @Transactional
-    @WithMockUser(username = "email@email.br",password = "123456")
-    public void cadastroDeProdutoPorUsuarioTeste() throws Exception {
-
-
-        String request = "{\n" +
-                "    \"nome\" : \"Tenis\",\n" +
-                "    \"valor\" : 1089.0,\n" +
-                "    \"descricao\" : \"Adidas usado \",\n" +
-                "    \"quantidade\" : 1,\n" +
-                "    \"idCategoria\" : 1,\n" +
-                "    \"caracteristicas\" : [\n" +
-                "        {\"nome\" : \"Marca\",\"descricao\" : \"Adidas\"} ,\n" +
-                "        { \"nome\" : \"Cor \" , \"descricao\" : \"Branco\"},\n" +
-                "        {\"nome\" : \"Desconto\", \"descricao\": \"10% a prazo\"}    \n" +
-                "    ]\n" +
-                "}";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/mercadolivre/produtos")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(request)
-        ).andExpect(MockMvcResultMatchers.status().isOk())
-                .andDo(MockMvcResultHandlers.print());
-
-    }
-
-    @Test
-    @Transactional
     @WithMockUser(username = "email@email.br",password = "123456")
     public void idCategoriaInvalidoTeste() throws Exception {
 

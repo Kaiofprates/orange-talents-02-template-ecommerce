@@ -68,7 +68,7 @@ public class CompraTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request)
         ).andExpect(MockMvcResultMatchers.status().is(302))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost:8080/mercadolivre/paypal.com/1?redirectUrl=urlRetornoAppPosPagamento"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost:8080/mercadolivre/paypal.com/3?redirectUrl=urlRetornoAppPosPagamento"))
                 .andDo(MockMvcResultHandlers.print());
     }
 
@@ -89,7 +89,7 @@ public class CompraTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(request)
         ).andExpect(MockMvcResultMatchers.status().is(302))
-                .andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost:8080/mercadolivre/pagseguro.com/1?redirectUrl=urlRetornoAppPosPagamento"))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("http://localhost:8080/mercadolivre/pagseguro.com/4?redirectUrl=urlRetornoAppPosPagamento"))
                 .andDo(MockMvcResultHandlers.print());
     }
 
