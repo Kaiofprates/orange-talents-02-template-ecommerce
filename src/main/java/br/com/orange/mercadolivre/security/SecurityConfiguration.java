@@ -57,6 +57,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter  {
                 .antMatchers("/h2-console/**").permitAll()
                 .antMatchers(HttpMethod.POST, "/mercadolivre/categorias").permitAll()
                 .antMatchers(HttpMethod.POST, "/mercadolivre/usuarios").permitAll()
+                .antMatchers(HttpMethod.POST, "/mercadolivre/notas-fiscais").permitAll()
+                .antMatchers(HttpMethod.POST, "/mercadolivre/ranking").permitAll()
                 .antMatchers("/mercadolivre/api/auth/**").permitAll()
                 .anyRequest().authenticated()
                 .and()

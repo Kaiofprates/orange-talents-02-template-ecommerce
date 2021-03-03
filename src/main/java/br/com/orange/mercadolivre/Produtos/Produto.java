@@ -75,22 +75,6 @@ public class Produto {
     }
     public Set<Opiniao> getOpinioes() { return opinioes; }
 
-
-    @Override
-    public String toString() {
-        return "Produto{" +
-                "id=" + id +
-                ", nome='" + nome + '\'' +
-                ", quantidade=" + quantidade +
-                ", descricao='" + descricao + '\'' +
-                ", valor=" + valor +
-                ", categoria=" + categoria +
-                ", usuario=" + usuario +
-                ", caracteristicas=" + caracteristicas +
-                ", imagens=" + imagens +
-                '}';
-    }
-
     public void associaImagens(Set<String> links) {
       Set<ImagemProduto> imagens  =   links.stream()
               .map( link -> new ImagemProduto(this,link))

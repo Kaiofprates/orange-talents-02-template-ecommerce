@@ -27,14 +27,11 @@ public class ProdutosController {
     @PersistenceContext
     private EntityManager manager;
 
-    //1
     @Autowired
     private UploaderFake uploaderFake;
-    //1
     @Autowired
     private AuthUtils authUtils;
 
-    //1
     @InitBinder(value = "ProdutoRequest")
     public void init(WebDataBinder binder){
     binder.addValidators(new ValidadorCaracteristica());
@@ -43,7 +40,7 @@ public class ProdutosController {
     @PostMapping("/produtos")
     @Transactional
     public ResponseEntity<?> cadastroProdutos(@RequestBody @Valid ProdutoRequest request){
-//1
+
         Produto produto = request.toModel(manager,authUtils.checkUser());
         manager.persist(produto);
         return ResponseEntity.ok(produto);
@@ -51,9 +48,8 @@ public class ProdutosController {
 
     @PostMapping("/produtos/{id}/imagens")
     @Transactional
-    public String recebeImagens(@PathVariable("id") Long id, @Valid ImagensRequest request){
+    public ResponseEntity<?> recebeImagens(@PathVariable("id") Long id, @Valid ImagensRequest request){
 
-    // 1
         Usuario usuario = authUtils.checkUser();
 
         /**
@@ -63,18 +59,14 @@ public class ProdutosController {
          * 4 - carregar o produto
          * 5 - salvar a nova versão do produto
          */
-// 1
        Set<String> links  =  uploaderFake.envia(request.getImages());
 
         /** Quanto mais cedo vc rodar a aplicação, mais cedo vc encontra os erros
          *  Menor é o escopo do código
          *  e mais facil é de resolver
-         */
-// 1
-        Produto produto = manager.find(Produto.class,id);
+         */Produto produto = manager.find(Produto.class,id);
         Assert.isTrue(produto != null, "Produto não encontrado");
 
-// 1
         if(produto.getUsuario().getEmail() != usuario.getEmail()){
             throw  new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
@@ -82,7 +74,7 @@ public class ProdutosController {
         produto.associaImagens(links);
 
         manager.merge(produto);
-        return produto.toString();
+        return ResponseEntity.ok().build();
 
     }
 
